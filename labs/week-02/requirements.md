@@ -1,7 +1,7 @@
 # Week 2 security requirements
 
-Your name:
-Date:
+Your name: 20094106 - Chamoo Lakshitha
+Date: 2026-10-01
 
 Fill this in as you work, rather than at the end. Where you are unsure, write
 that you are unsure and say why. A sentence you can support is worth more than a
@@ -25,11 +25,11 @@ changed or unavailable. Write the cost so that somebody outside the team could
 understand it.
 
 | Asset | What it costs if this goes wrong |
-|---|---|
-|  |  |
-|  |  |
-|  |  |
-|  |  |
+| ----- | -------------------------------- |
+|       |                                  |
+|       |                                  |
+|       |                                  |
+|       |                                  |
 
 ## 3. The requirements
 
