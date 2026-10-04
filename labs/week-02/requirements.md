@@ -18,18 +18,22 @@ uses it.
 checked and found different, however small. Write "nothing found" if that is the
 honest answer.
 
+Answer: Atrium is a Node.js/Express web app that hosts week-by-week learning labs.
+It uses PostgreSQL database as the database server and session handling via express-session.
+Public content is in the atrium/public folder and using server-side API routes.
+
 ## 2. What is worth protecting
 
 Four assets. For each one, say what it is and what it would cost if it were seen,
 changed or unavailable. Write the cost so that somebody outside the team could
 understand it.
 
-| Asset | What it costs if this goes wrong |
-| ----- | -------------------------------- |
-|       |                                  |
-|       |                                  |
-|       |                                  |
-|       |                                  |
+| Asset            | What it costs if this goes wrong                                                                                              |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Database         | database expose or unavailability will directly impact the functions of this app and also expose personal data. $100k - $300k |
+| Shared Documents | The owner of the shared document will have to re-create or upload.                                                            |
+| Passwords        | Leaked passwords will be used by an attacker to gain access and further exploit the system                                    |
+| Admin account    | This will directly leads to the attacker to gain admin rights and continue the exploitation                                   |
 
 ## 3. The requirements
 
