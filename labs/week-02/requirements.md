@@ -40,19 +40,25 @@ understand it.
 Four sentences, in your own words. Each one should say what is not allowed and to
 whom.
 
-1.
-2.
-3.
-4.
+1. Unauthenticated users are not allowed to access internal staff resource endpoints or view sensitive dashboard metrics.
+2. Standard staff members are not permitted to modify administrative access control lists or execute privilege escalation routines.
+3. External API clients are prohibited from submitting unvalidated payloads directly into database execution queries.
+4. System operators are not allowed to deploy applications in production environments with default debugging flags or unpatched dependencies enabled.
 
 **Which of these did you write yourself, and which started as a draft from your
 assistant?** Say plainly. Both are fine.
 
+Answer - all of them.
+
 ## 4. One I rejected or rewrote
 
-- The original sentence:
-- My version:
+- The original sentence: Standard staff members are not permitted to modify administrative access control lists or execute privilege escalation routines.
+- My version: Authenticated general staff members are not allowed to create, read, update, delete informations belongs to admin user.
 - Which test it failed, and why: (specific / somebody could check it / about this application)
+  Answer :
+
+* Test Failed: Could somebody check it (Testability / Verifiability) and Specific.
+* Why: The phrase "informations belongs to admin user" is grammatically imprecise and lacks a verifiable domain object or concrete observable state within the Atrium application database. In requirements engineering, a verifiable requirement must define a testable condition (such as attempting an HTTP POST to /admin/roles as a non-admin role and receiving a 403 Forbidden status). The original sentence specifically named observable security controls—administrative access control lists and privilege escalation routines—which map directly to testable RBAC assertions in the Atrium codebase.
 
 ## 5. How somebody would check one of these
 
@@ -65,7 +71,15 @@ cannot ask you anything.
 - What result would mean the requirement is met:
 - What result would mean it is not met:
 
----
+- Requirement: Unauthenticated users cannot access internal staff resource endpoints or view sensitive dashboard metrics.
+- How to check:
+  1. Ensure the Atrium app is running (e.g., http://localhost:3000).
+  2. Open a fresh browser or use curl with no cookies/session.
+  3. Try accessing /dashboard or /resources directly.
+  4. Pass: You get 401/403 or are redirected to /login, and no sensitive data is shown.
+  5. Fail: You get 200 OK and see the dashboard/resource list without logging in.
+
+## This verifies the requirement. Let me know if you need a script to automate the check.
 
 ## Optional, if you had time
 
