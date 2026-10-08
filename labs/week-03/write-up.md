@@ -13,29 +13,29 @@ cannot support.
 
 State which of the three the tool reported.
 
-- File:
-- Line:
-- What the tool said about it:
+- File: src/handlers/directory.js
+- Line: 8-11
+- What the tool said about it: This SQL statement is built by joining pieces of text together... if any pieces came from outside the application, the database will read it as part of the command rather than as a value
 
 ## 2. What an assistant told me
 
 Say which assistant you asked, and what it said in a sentence or two.
 
-- Assistant used:
-- Its explanation, in your own words:
-- One thing it asserted that I had not verified at that point:
+- Assistant used: Hermes
+- Its explanation, in your own words: The search querry is directly inserted in to SQL statement so user input can change the logic of the SQL querry.
+- One thing it asserted that I had not verified at that point: whether the search input actually reaches the SQL in a dangerous way in the running app.
 
 ## 3. What the code shows
 
 Answer all four. If you cannot answer one, say so.
 
-**Where does the data come from?**
+**Where does the data come from?** - The input comes from req.query.q in the HTTP request for the directory page.
 
-**What happens to it on the way?**
+**What happens to it on the way?** - It is passed into searchDirectory(db, q), then concatenated into the SQL at the LIKE clauses.
 
-**Where does it become dangerous?**
+**Where does it become dangerous?** - When the database executes the final SQL string, the attacker-controlled string becomes part of the SQL syntax instead of a literal value.
 
-**What stands in the way?**
+**What stands in the way?** - Nothing in this code prevents malicious input from being inserted into the query string. There is no parameter binding and no sanitization.
 
 ## 4. What the running application shows
 
