@@ -1,7 +1,7 @@
 # Week 3 record
 
-Your name:
-Date:
+Your name: Chamoo Lakshitha
+Date: 2026-10-08
 
 Fill this in as you work, rather than at the end. Where you are unsure, write
 that you are unsure and say why. That is worth more than a confident sentence you
