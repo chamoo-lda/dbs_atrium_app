@@ -79,8 +79,6 @@ cannot ask you anything.
   4. Pass: You get 401/403 or are redirected to /login, and no sensitive data is shown.
   5. Fail: You get 200 OK and see the dashboard/resource list without logging in.
 
-## This verifies the requirement. Let me know if you need a script to automate the check.
-
 ## Optional, if you had time
 
 Your four requirements in order, most important first, with one sentence each on
