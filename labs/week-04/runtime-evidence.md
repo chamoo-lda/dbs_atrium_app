@@ -1,16 +1,16 @@
 # Week 4 runtime evidence
 
-Your name:
-Date:
-Atrium address and port:
-ZAP run or class scan evidence:
+Your name: Chamoo Lakshitha | 20094106
+Date: 2026-10-12
+Atrium address and port: http://localhost:9090
+ZAP run or class scan evidence: ZAP run
 
 Fill this in as you work. If a step failed, say what you tried and what
 evidence you used instead. Do not paste a full session cookie value.
 
 ## 1. Coverage before sign-in
 
-- Account state:
+- Account state: loggedout
 - Routes reached by the spider:
 - My direct `GET /directory` request: status, redirect and final page:
 - What this run could not test:
