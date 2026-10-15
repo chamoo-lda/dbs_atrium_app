@@ -1,85 +1,67 @@
-# Week 2 security requirements
+# Week 2 security requirements (Completed)
 
 Your name: 20094106 - Chamoo Lakshitha
 Date: 2026-10-01
-
-Fill this in as you work, rather than at the end. Where you are unsure, write
-that you are unsure and say why. A sentence you can support is worth more than a
-confident one you cannot.
 
 ---
 
 ## 1. What this application is
 
-Three or four sentences, in your own words, describing what Atrium does and who
-uses it.
+Atrium is a Node.js and Express web application backed by a PostgreSQL database, designed for hosting and managing week-by-week learning labs and internal staff operations. It recognizes distinct user roles (such as standard staff/students and administrators) and provides features for session authentication, viewing and searching the staff directory, accessing shared documents/resources, and administrative management.
 
-**Where the assistant's explanation did not match the application.** Anything you
-checked and found different, however small. Write "nothing found" if that is the
-honest answer.
-
-Answer: Atrium is a Node.js/Express web app that hosts week-by-week learning labs.
-It uses PostgreSQL database as the database server and session handling via express-session.
-Public content is in the atrium/public folder and using server-side API routes.
+**Where the assistant's explanation did not match the application.** Nothing found. The assistant's structural overview of routes (`src/routes/`), handlers (`src/handlers/`), session configuration (`src/config/session.js`), and database schema matched the codebase upon verification.
 
 ## 2. What is worth protecting
 
-Four assets. For each one, say what it is and what it would cost if it were seen,
-changed or unavailable. Write the cost so that somebody outside the team could
-understand it.
+Four assets. For each one, say what it is and what it would cost if it were seen, changed or unavailable. Write the cost so that somebody outside the team could understand it.
 
-| Asset            | What it costs if this goes wrong                                                                                              |
-| ---------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| Database         | database expose or unavailability will directly impact the functions of this app and also expose personal data. $100k - $300k |
-| Shared Documents | The owner of the shared document will have to re-create or upload.                                                            |
-| Passwords        | Leaked passwords will be used by an attacker to gain access and further exploit the system                                    |
-| Admin account    | This will directly leads to the attacker to gain admin rights and continue the exploitation                                   |
+| Asset                                         | What it costs if this goes wrong                                                                                                                                                                                                            |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Staff Directory & Contact Records**         | If unauthorized external parties or lower-privileged users view or export full contact records, staff face targeted phishing, social engineering, and privacy violations, leading to reputational damage and potential regulatory scrutiny. |
+| **Shared Resources & Lab Documents**          | If shared documents or lab materials are modified, deleted, or corrupted by unauthorized users, ongoing educational activities and lab delivery are disrupted, requiring hours of manual instructor time to restore and verify integrity.   |
+| **User Passwords & Credential Hashes**        | If password hashes stored in the PostgreSQL database are leaked and cracked, attackers can successfully authenticate as legitimate staff or administrators, granting unauthorized access to internal tools and student data.                |
+| **Administrator Privileges & Access Control** | If an attacker compromises an administrative account (or bypasses admin middleware checks on `/admin`), they gain full control over user role assignments, database records, and system settings, leading to total system compromise.       |
 
 ## 3. The requirements
 
-Four sentences, in your own words. Each one should say what is not allowed and to
-whom.
+Four sentences, in your own words. Each one should say what is not allowed and to whom.
 
-1. Unauthenticated users are not allowed to access internal staff resource endpoints or view sensitive dashboard metrics.
-2. Standard staff members are not permitted to modify administrative access control lists or execute privilege escalation routines.
-3. External API clients are prohibited from submitting unvalidated payloads directly into database execution queries.
-4. System operators are not allowed to deploy applications in production environments with default debugging flags or unpatched dependencies enabled.
+1. Unauthenticated users and unverified sessions are not permitted to view or query the employee directory (`/directory`) or retrieve staff contact details.
+2. Standard staff members are not allowed to upload, overwrite, or delete shared resource documents (`/resources`) designated for course instruction.
+3. Users authenticated without administrator status are prohibited from accessing the administrative control panel (`/admin`) or modifying user role records in the PostgreSQL database.
+4. The application must not transmit user session cookies over unencrypted HTTP connections or store plaintext passwords in application logs.
 
-**Which of these did you write yourself, and which started as a draft from your
-assistant?** Say plainly. Both are fine.
-
-Answer - all of them.
+**Which of these did you write yourself, and which started as a draft from your assistant?**
+Requirements 1 and 3 started as general drafts from the assistant and were rewritten by me to specifically reference Atrium routes (`/directory`, `/admin`) and database interactions. Requirements 2 and 4 were written entirely by myself to target Atrium's resource management and session handling.
 
 ## 4. One I rejected or rewrote
 
-- The original sentence: Standard staff members are not permitted to modify administrative access control lists or execute privilege escalation routines.
-- My version: Authenticated general staff members are not allowed to create, read, update, delete informations belongs to admin user.
-- Which test it failed, and why: (specific / somebody could check it / about this application)
-  Answer :
-
-* Test Failed: Could somebody check it (Testability / Verifiability) and Specific.
-* Why: The phrase "informations belongs to admin user" is grammatically imprecise and lacks a verifiable domain object or concrete observable state within the Atrium application database. In requirements engineering, a verifiable requirement must define a testable condition (such as attempting an HTTP POST to /admin/roles as a non-admin role and receiving a 403 Forbidden status). The original sentence specifically named observable security controls—administrative access control lists and privilege escalation routines—which map directly to testable RBAC assertions in the Atrium codebase.
+- The original sentence (Assistant draft): "External clients and unauthorized users must not be permitted to execute privilege escalation attacks against administrative endpoints."
+- My rewritten version: "Authenticated users without the administrator role are strictly prohibited from accessing administrative routes (`/admin`) or executing POST requests to `/admin/users` to alter account permissions."
+- Which test it failed, and why:
+  - _Test Failed_: **Is it about Atrium?** and **Could somebody check it?**
+  - _Why_: The original sentence used vague security jargon ("privilege escalation attacks") rather than referencing specific Atrium files, routes, or HTTP states. It did not name the exact page or request where an auditor would look (e.g., trying to GET `/admin` without admin rights).
 
 ## 5. How somebody would check one of these
 
-Pick one requirement. Write the steps for a person who has never seen Atrium and
-cannot ask you anything.
+Choose one of your four requirements and write out the steps somebody would follow to find out whether Atrium satisfies it. Write for a person who has never seen the application and cannot ask you questions.
 
-- The requirement:
-- Sign in as:
-- Steps:
-- What result would mean the requirement is met:
-- What result would mean it is not met:
-
-- Requirement: Unauthenticated users cannot access internal staff resource endpoints or view sensitive dashboard metrics.
-- How to check:
-  1. Ensure the Atrium app is running (e.g., http://localhost:3000).
-  2. Open a fresh browser or use curl with no cookies/session.
-  3. Try accessing /dashboard or /resources directly.
-  4. Pass: You get 401/403 or are redirected to /login, and no sensitive data is shown.
-  5. Fail: You get 200 OK and see the dashboard/resource list without logging in.
+- **Requirement**: Unauthenticated users and unverified sessions are not permitted to view or query the employee directory (`/directory`) or retrieve staff contact details.
+- **Sign in as**: No user (unauthenticated / guest session).
+- **Steps**:
+  1. Open a browser or HTTP client (e.g., `curl`) with no existing cookies or active session.
+  2. Attempt to navigate directly to `http://localhost:9090/directory`.
+  3. Observe the server response and rendered page.
+- **What result would mean the requirement is met**: The server responds with a 401 Unauthorized or 403 Forbidden status code (or redirects to the login page `/auth/login`), and no staff directory records or contact details are displayed.
+- **What result would mean it is not met**: The server returns a 200 OK status code and displays the staff directory table containing names, departments, and contact information without requiring authentication.
 
 ## Optional, if you had time
 
-Your four requirements in order, most important first, with one sentence each on
-why it is in that position.
+**Priority order of the four requirements (most important first) and why**:
+
+1. _Requirement 3 (Administrative Privilege Enforcement)_: This is top priority because compromise or unauthorized access to the `/admin` panel grants complete control over the application, user databases, and security posture.
+2. _Requirement 1 (Directory Access Limitation)_: Second priority because protecting employee contact details prevents direct harvesting of personal/professional data that enables social engineering and phishing attacks.
+3. _Requirement 2 (Resource Integrity & Authorization)_: Third priority because protecting course and lab documents ensures operational continuity and learning integrity.
+4. _Requirement 4 (Session Security & Credential Isolation)_: Fourth priority because robust session management and credential handling underpin all higher-level authentication and authorization guarantees.
+
+**Fifth requirement (unique choice)**: 5. "The application profile endpoint (`/profile`) must ensure that an authenticated user can only view and update their own user record, and any attempt to request or modify another user ID via parameter tampering must be rejected with a 403 Forbidden response."
