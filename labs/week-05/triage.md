@@ -20,16 +20,16 @@ Fill this in as you work. If a check could not be completed, record what stopped
 
 For each entry, use **supported**, **ruled out**, or **needs review**. Keep overlap separate from status. Name a file and line, or a request and response, in the evidence column. If evidence is missing, say what check would settle it.
 
-| ID | Status | Evidence or missing check | Overlap with another ID? | Investigate now, later, or close? |
-|---|---|---|---|---|
-| S1 | supported | `src/handlers/directory.js:8` — SQL query built by string concatenation combining `q` without parameterization. | Overlaps Z1, Z2, Z3 | Investigate now |
-| S2 | ruled out | `src/handlers/resources.js:5` — `RESOURCE_QUERY` uses parameterized `?` placeholder despite Semgrep static heuristic rule match. | None | Close |
-| S3 | ruled out | `src/db/reset.js:12` — `INSERT_USER` uses parameterized placeholders `?` with `.run()`. | None | Close |
-| Z1 | supported | ZAP alert for SQL Injection / HTTP 500 error returned when testing special characters in `GET /directory?q=`. | Overlaps S1 | Investigate now |
-| Z2 | supported | ZAP alert for Reflected XSS / search parameter `q` reflected unescaped in response HTML. | Overlaps S1, Z3 | Investigate now |
-| Z3 | supported | ZAP alert for User Controllable HTML Element Attribute in search input `value="<%= q %>"`. | Overlaps S1, Z2 | Investigate later |
-| Z4 | supported | ZAP alert for Content Security Policy (CSP) Header Not Set on `GET /dashboard`. | None | Investigate later |
-| Z5 | supported | ZAP alert for Cookie No HttpOnly Flag (`Set-Cookie: connect.sid` without HttpOnly in `src/config/session.js`). | None | Investigate later |
+| ID  | Status    | Evidence or missing check                                                                                                        | Overlap with another ID? | Investigate now, later, or close? |
+| --- | --------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ | --------------------------------- |
+| S1  | supported | `src/handlers/directory.js:8` — SQL query built by string concatenation combining `q` without parameterization.                  | Overlaps Z1, Z2, Z3      | Investigate now                   |
+| S2  | ruled out | `src/handlers/resources.js:5` — `RESOURCE_QUERY` uses parameterized `?` placeholder despite Semgrep static heuristic rule match. | None                     | Close                             |
+| S3  | ruled out | `src/db/reset.js:12` — `INSERT_USER` uses parameterized placeholders `?` with `.run()`.                                          | None                     | Close                             |
+| Z1  | supported | ZAP alert for SQL Injection / HTTP 500 error returned when testing special characters in `GET /directory?q=`.                    | Overlaps S1              | Investigate now                   |
+| Z2  | supported | ZAP alert for Reflected XSS / search parameter `q` reflected unescaped in response HTML.                                         | Overlaps S1, Z3          | Investigate now                   |
+| Z3  | supported | ZAP alert for User Controllable HTML Element Attribute in search input `value="<%= q %>"`.                                       | Overlaps S1, Z2          | Investigate later                 |
+| Z4  | supported | ZAP alert for Content Security Policy (CSP) Header Not Set on `GET /dashboard`.                                                  | None                     | Investigate later                 |
+| Z5  | supported | ZAP alert for Cookie No HttpOnly Flag (`Set-Cookie: connect.sid` without HttpOnly in `src/config/session.js`).                   | None                     | Investigate later                 |
 
 ## 3. First three matters to investigate
 

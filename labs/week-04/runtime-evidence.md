@@ -54,7 +54,9 @@ This evidence proves that when running Atrium locally as `alice.nolan`, query pa
 This evidence does not prove that arbitrary malicious JavaScript execution or session hijacking has successfully targeted any user, that attackers have stolen session cookies, or that the live production system behaves identically.
 
 ## 6. Short finding
+
 During dynamic security analysis of Atrium running locally as `alice.nolan`, testing the staff directory search (`/directory?q=...`) revealed that user input supplied via the `q` parameter is reflected into the HTML response without proper HTML escaping (`<strong><%- q %></strong>`). If exploited by an authenticated attacker via a crafted malicious link, this reflected Cross-Site Scripting (XSS) vulnerability could enable arbitrary script execution within a victim's browser session. Evidence was captured via OWASP ZAP and verified manually through browser testing. High-level repair: Replace unescaped EJS output tags (`<%- q %>`) with HTML-escaped output tags (`<%= q %>`) in template views and enforce proper input sanitization and output encoding.
 
 ## Optional, if you had time
+
 `/dashboard` (and `/directory`, `/documents`, `/profile`). This demonstrates that an unauthenticated spider has zero coverage of authenticated application logic and cannot discover routes protected behind authentication middleware, emphasizing that dynamic scanners require valid session credentials and configuration to be effective against access-controlled web applications.
